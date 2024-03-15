@@ -1,0 +1,2 @@
+Отправлен запрос POST по https://qa-scooter.praktikum-services.ru/api/v1/courier/
+Отправлен запрос POST по https://qa-scooter.praktikum-services.ru/api/v1/courier/login/
