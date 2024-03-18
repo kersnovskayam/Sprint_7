@@ -2,24 +2,24 @@ import allure
 
 from methods.baseApp import BaseApp
 from utils.allure_decorator import allure_step_decorator
-from utils.constants import ORDER_LIST, ORDER_TRACK_NUMBER, ORDER_URL
+from utils.constants import ORDER_TRACK_NUMBER, ORDER_URL
 
 
 class OrderMethods:
     @staticmethod
     @allure.step("Создание заказа с корректными данными")
-    def create_order(url, data):
+    def create_order(api_connection, data):
         data = data
 
-        response = BaseApp.send_post_request(url, data)
+        response = BaseApp.send_post_request(api_connection, data)
 
         return response
 
 
     @staticmethod
     @allure.step("Подтверждение принятия заказа")
-    def apply_order(url, order_track, courier_id):
-        apply_order_url = f"{url}{order_track}?courierId={courier_id}"
+    def apply_order(api_connection, order_track, courier_id):
+        apply_order_url = f"{api_connection}{order_track}?courierId={courier_id}"
 
         response = BaseApp.send_put_request(apply_order_url)
 
@@ -27,10 +27,10 @@ class OrderMethods:
 
     @staticmethod
     @allure_step_decorator("Получение трек-номера заказа")
-    def get_order_track(url, data):
+    def get_order_track(api_connection, data):
         data = data
 
-        response = BaseApp.send_post_request(url, data)
+        response = BaseApp.send_post_request(api_connection, data)
 
         return response
 

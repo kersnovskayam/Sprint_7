@@ -7,14 +7,14 @@ class CourierMethods:
 
     @staticmethod
     @allure_step_decorator("Метод по созданию курьера")
-    def create_courier(url, login, password, first_name):
+    def create_courier(api_connection, login, password, first_name):
         data = {
             "login": login,
             "password": password,
             "firstName": first_name
         }
 
-        response = BaseApp.send_post_request(url, data)
+        response = BaseApp.send_post_request(api_connection, data)
 
         return response
 

@@ -1,3 +1,0 @@
-Отправлен запрос POST по https://qa-scooter.praktikum-services.ru/api/v1/courier/
-Отправлен запрос POST по https://qa-scooter.praktikum-services.ru/api/v1/courier/login/
-Отправлен запрос PUT по https://qa-scooter.praktikum-services.ru/api/v1/orders/accept/999999999?courierId=276968

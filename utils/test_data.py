@@ -7,7 +7,9 @@ class TestData:
     WRONG_COURIER_ID = ""
     INVALID_ORDER_ID = 999999999
     WRONG_ORDER_ID = ""
-    EXISTINGLOGIN = "existing_login"
+    EXISTING_LOGIN = "existing_login"
+    NONE_LOGIN = None
+    NONE_PASSWORD = None
 
     ORDER_DATA_ONE = {
         "firstName": "Naruto",

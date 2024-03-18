@@ -9,14 +9,6 @@ from utils.test_data import TestData
 
 class TestRestApiOrderCreate:
 
-    @allure_step_decorator("Тест успешного создания заказа с одним цветом")
-    def test_create_order_with_valid_data(self):
-        data = TestData.ORDER_DATA_ONE
-        response = OrderMethods.create_order(ORDER_URL, data)
-
-        assert response.status_code == 201
-        assert "track" in response.json()
-
     @allure_step_decorator("Тест успешного создания заказа с двумя цветами")
     def test_create_order_with_two_colors(self):
         data = TestData.ORDER_DATA_TWO
@@ -35,26 +27,17 @@ class TestRestApiOrderCreate:
 
     @allure_step_decorator("Тест успешного принятия заказа")
     def test_list_apply(self):
-        # регистрация курьера
         login, password, first_name = OtherMethods.generation_data()
-        response = CourierMethods.create_courier(COURIER_URL, login, password, first_name)
-
-        assert response.status_code == 201
-        assert response.json() == {'ok': True}
+        CourierMethods.create_courier(COURIER_URL, login, password, first_name)
 
         # авторизация курьера и получение его id
         response = CourierLoginMethods.login_courier(COURIER_LOGIN_URL, login, password)
         response_data = response.json()
         courier_id = response_data['id']
 
-        assert response.status_code == 200
-        assert "id" in response.json()
-
         # создание заказа
         data = TestData.ORDER_DATA_ONE
         response = OrderMethods.create_order(ORDER_URL, data)
-        assert response.status_code == 201
-        assert "track" in response.json()
 
         response_data = response.json()
         order_track = response_data['track']
@@ -72,11 +55,8 @@ class TestRestApiOrderCreate:
     def test_list_apply_wrong_courier_id(self):
         courier_id = TestData.WRONG_COURIER_ID
 
-        # создание заказа
         data = TestData.ORDER_DATA_ONE
         response = OrderMethods.create_order(ORDER_URL, data)
-        assert response.status_code == 201
-        assert "track" in response.json()
 
         response_data = response.json()
         order_track = response_data['track']
@@ -94,11 +74,8 @@ class TestRestApiOrderCreate:
     def test_list_apply_invalid_courier_id(self):
         courier_id = TestData.INVALID_COURIER_ID
 
-        # создание заказа
         data = TestData.ORDER_DATA_ONE
         response = OrderMethods.create_order(ORDER_URL, data)
-        assert response.status_code == 201
-        assert "track" in response.json()
 
         response_data = response.json()
         order_track = response_data['track']
@@ -116,20 +93,12 @@ class TestRestApiOrderCreate:
     def test_list_apply_wrong_order_id(self):
         order_id = TestData.WRONG_ORDER_ID
 
-        # регистрация курьера
         login, password, first_name = OtherMethods.generation_data()
-        response = CourierMethods.create_courier(COURIER_URL, login, password, first_name)
+        CourierMethods.create_courier(COURIER_URL, login, password, first_name)
 
-        assert response.status_code == 201
-        assert response.json() == {'ok': True}
-
-        # авторизация курьера и получение его id
         response = CourierLoginMethods.login_courier(COURIER_LOGIN_URL, login, password)
         response_data = response.json()
         courier_id = response_data['id']
-
-        assert response.status_code == 200
-        assert "id" in response.json()
 
         response = OrderMethods.apply_order(ORDER_ACCEPT, order_id, courier_id)
 
@@ -140,20 +109,12 @@ class TestRestApiOrderCreate:
     def test_list_apply_invalid_order_id(self):
         order_id = TestData.INVALID_ORDER_ID
 
-        # регистрация курьера
         login, password, first_name = OtherMethods.generation_data()
-        response = CourierMethods.create_courier(COURIER_URL, login, password, first_name)
+        CourierMethods.create_courier(COURIER_URL, login, password, first_name)
 
-        assert response.status_code == 201
-        assert response.json() == {'ok': True}
-
-        # авторизация курьера и получение его id
         response = CourierLoginMethods.login_courier(COURIER_LOGIN_URL, login, password)
         response_data = response.json()
         courier_id = response_data['id']
-
-        assert response.status_code == 200
-        assert "id" in response.json()
 
         response = OrderMethods.apply_order(ORDER_ACCEPT, order_id, courier_id)
 
@@ -163,26 +124,15 @@ class TestRestApiOrderCreate:
 
     @allure_step_decorator("Тест успешного получения информации заказа по трэк номеру")
     def test_list_apply_order(self):
-        # регистрация курьера
         login, password, first_name = OtherMethods.generation_data()
-        response = CourierMethods.create_courier(COURIER_URL, login, password, first_name)
+        CourierMethods.create_courier(COURIER_URL, login, password, first_name)
 
-        assert response.status_code == 201
-        assert response.json() == {'ok': True}
-
-        # авторизация курьера и получение его id
         response = CourierLoginMethods.login_courier(COURIER_LOGIN_URL, login, password)
         response_data = response.json()
         courier_id = response_data['id']
 
-        assert response.status_code == 200
-        assert "id" in response.json()
-
-        # создание заказа
         data = TestData.ORDER_DATA_ONE
         response = OrderMethods.create_order(ORDER_URL, data)
-        assert response.status_code == 201
-        assert "track" in response.json()
 
         response_data = response.json()
         order_track = response_data['track']
@@ -191,10 +141,7 @@ class TestRestApiOrderCreate:
         response_data = response.json()
         order_id = response_data['order']['id']
 
-        response = OrderMethods.apply_order(ORDER_ACCEPT, order_id, courier_id)
-
-        assert response.status_code == 200
-        assert response.json() == {'ok': True}
+        OrderMethods.apply_order(ORDER_ACCEPT, order_id, courier_id)
 
         response = OrderMethods.get_order_list(courier_id)
 

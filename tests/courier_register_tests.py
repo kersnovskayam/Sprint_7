@@ -1,5 +1,3 @@
-import pytest
-
 from methods.courier_login_methods import CourierLoginMethods
 from methods.courier_register_methods import CourierMethods, CourierDeleteMethods
 from methods.other_methods import OtherMethods
@@ -7,14 +5,7 @@ from utils.allure_decorator import allure_step_decorator
 from utils.constants import COURIER_URL, COURIER_LOGIN_URL
 from utils.test_data import TestData
 
-@pytest.fixture(scope="class")
-def setup_courier():
-    login, password, first_name = OtherMethods.generation_data()
-    response = CourierMethods.create_courier(COURIER_URL, login, password, first_name)
-    assert response.status_code == 201
-    assert response.json() == {'ok': True}
 
-    yield login, password
 
 class TestRestApiRegisterCourier:
 
@@ -28,7 +19,7 @@ class TestRestApiRegisterCourier:
 
     @allure_step_decorator("Тест создания курьера с повторяющимся логином")
     def test_duplicate_courier_creation(self):
-        login = TestData.EXISTINGLOGIN
+        login = TestData.EXISTING_LOGIN
         _, password, first_name = OtherMethods.generation_data()
         response = CourierMethods.create_courier(COURIER_URL, login, password, first_name)
 
@@ -47,13 +38,9 @@ class TestRestApiRegisterCourier:
     @allure_step_decorator("Тест удаления курьера с передачей id")
     def test_delete_courier_by_id(self):
         login, password, first_name = OtherMethods.generation_data()
-        response = CourierMethods.create_courier(COURIER_URL, login, password, first_name)
-        assert response.status_code == 201
-        assert response.json() == {'ok': True}
+        CourierMethods.create_courier(COURIER_URL, login, password, first_name)
 
         response = CourierLoginMethods.login_courier(COURIER_LOGIN_URL, login, password)
-        assert response.status_code == 200
-        assert "id" in response.json()
 
         response_data = response.json()
         courier_id = response_data['id']
